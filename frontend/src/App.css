@@ -1,0 +1,134 @@
+/* Общие стили */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Основной контент — занимает всё оставшееся место */
+.content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background: #fff;
+}
+
+::selection {  /*выделение текста с помощью псевдоэлемента*/
+    background-color: #fffb00;
+}
+
+/* Стилизация таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+table th, table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Стилизация списка */
+.custom-list {
+    list-style: none;
+    /* margin-top: 1rem; */
+     padding-left: 0;
+    /* padding-left: 1rem; */
+}
+
+.custom-list li::before {
+    content: "📌";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+/*    background-image: url("https://cdn-icons-png.flaticon.com/512/1177/1177562.png");*/
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Стиль для маркера списка без before (надо маленькую иконку)*/
+/* .custom-list li {
+    list-style-type: none;
+    list-style-image: url("https://cdn-icons-png.flaticon.com/512/1177/1177562.png");
+} */
+
+/* Стиль для подзаголовков с решеткой */
+h2 .anchor {
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-left: 5px;
+}
+
+h2:hover .anchor {  /*при наведении будет отображаться #*/
+    opacity: 1;
+}
+
+.main-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.main-header h2 {
+  font-size: 1.8rem;
+  color: #1a73e8;
+  margin: 0;
+}
+
+/* Стиль для блочного элемента */
+.box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 1rem;
+}
+
+/* Стиль для контейнера с изображениями */
+.image-container {
+    margin-top: 2rem;
+    /*    gap: 2rem;     *//* Отступ между картинками */
+    display: flex; /* Горизонтальное расположение */
+    justify-content: space-evenly; /* Центрирование по горизонтали */
+    flex-wrap: wrap;  /* Разбить на несколько строк, если не помещается в одну строку*/
+}
+
+/* Анимация изображения */
+.animated-image {
+    max-width: 40%;
+    height: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+/*    animation: float 3s infinite ease-in-out 3s;  *//*начинается и заканчивается медленно, ускоряясь в середине; второе время - это задержка*/
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animated-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Стиль для загрузки/ошибки */
+.status-message {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    color: #d9534f;
+}

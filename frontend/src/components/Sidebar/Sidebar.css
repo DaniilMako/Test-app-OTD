@@ -1,0 +1,55 @@
+/* Sidebar.css — обновлённый */
+.sidebar {
+  width: 220px;
+  background-color: #3386d8;
+  color: white;
+  flex-shrink: 0;
+  padding: 1rem;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Занимает всю высоту экрана */
+}
+
+.sidebar nav {
+  flex: 1;
+  overflow-y: auto; /* Вертикальный скролл, если не помещается */
+  padding-top: 1rem;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.sidebar nav li {
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* background-color: #3498db; */
+}
+
+.sidebar nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar nav a:hover {  /*при наведении на пункт меню*/
+    background-color: #004d80;
+}
+
+.sidebar nav .active {
+  background-color: #e67e22;
+  color: white;
+}
+
+/*при зажатии на пункт меню*/
+.sidebar nav a:active {
+    background-color: #00ff04;
+}

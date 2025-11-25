@@ -1,0 +1,71 @@
+/* src/components/PostsPanel/PostsPanel.css */
+.posts-container {
+    width: 90%;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.post-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.post-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.post-body {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.range-slider {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.range-slider input[type="range"] {
+    width: 70%;
+    accent-color: #3498db;
+}
+
+.range-slider label {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.method-toggle {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.method-toggle input[type="radio"] {
+    accent-color: #3498db;
+}
+
+.status-message {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    color: #d9534f;
+}
