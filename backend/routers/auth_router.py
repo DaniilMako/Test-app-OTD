@@ -14,8 +14,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=Token)
 async def register(user: UserCreate, session: AsyncSession = Depends(get_async_session)):
-    # Проверяем, существует ли login
-    result = await session.execute(select(users).where(users.c.login == user.login))
+    # Проверяем, существует ли email
+    result = await session.execute(select(users).where(users.c.email == user.email))
     if result.first():
         raise HTTPException(status_code=400, detail="Email already registered")
 
@@ -30,7 +30,7 @@ async def register(user: UserCreate, session: AsyncSession = Depends(get_async_s
 
     # Вставляем пользователя
     stmt = insert(users).values(
-        login=user.login,
+        email=user.email,
         password=hashed_password,
         role_id=role.id
     ).returning(users.c.id)
@@ -39,13 +39,13 @@ async def register(user: UserCreate, session: AsyncSession = Depends(get_async_s
     await session.commit()
 
     # Создаём токен
-    access_token = create_access_token(data={"sub": user.login, "role": role.name})
+    access_token = create_access_token(data={"sub": user.email, "role": role.name})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/login", response_model=Token)
 async def login(data: LoginData, session: AsyncSession = Depends(get_async_session)):
-    result = await session.execute(select(users).where(users.c.login == data.login))
+    result = await session.execute(select(users).where(users.c.email == data.email))
     user = result.first()
     if not user or not verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -55,5 +55,5 @@ async def login(data: LoginData, session: AsyncSession = Depends(get_async_sessi
     if not role:
         raise HTTPException(status_code=500, detail="User role not found in database")
 
-    access_token = create_access_token(data={"sub": user.login, "role": role.name})
+    access_token = create_access_token(data={"sub": user.email, "role": role.name})
     return {"access_token": access_token, "token_type": "bearer"}

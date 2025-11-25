@@ -33,7 +33,7 @@ users = Table(
     "users",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("login", String, unique=True, nullable=False),
+    Column("email", String, unique=True, nullable=False),
     Column("password", String, nullable=False),  # sha256
     Column("role_id", Integer, ForeignKey("roles.id")),
 )

@@ -39,6 +39,7 @@ export default function StatsPage() {
               <th>Страница</th>
               <th>Посещения</th>
               <th>Время</th>
+              <th>Путь</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +48,7 @@ export default function StatsPage() {
                 <td>{s.title}</td>
                 <td>{s.visits}</td>
                 <td>{s.time_spent}</td>
+                <td>{s.path}</td>
               </tr>
             ))}
           </tbody>

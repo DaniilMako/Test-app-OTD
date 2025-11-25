@@ -14,7 +14,7 @@ class Kpi(BaseModel):
 # === Схемы для авторизации ===
 
 class UserCreate(BaseModel):
-    login: str
+    email: str
     password: str
 
 class Token(BaseModel):
@@ -22,10 +22,5 @@ class Token(BaseModel):
     token_type: str
 
 class LoginData(BaseModel):
-    login: str
+    email: str
     password: str
-
-
-class RoleUpdate(BaseModel):
-    login: str
-    role_name: str

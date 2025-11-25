@@ -1,8 +1,7 @@
-// src/components/RegisterPage/RegisterPage.js
+// src/components/Auth/RegisterPage.js
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Auth.css";
-
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -20,7 +19,7 @@ export default function RegisterPage() {
       alert("Регистрация успешна");
       navigate("/login");
     } else {
-      alert("Ошибка");
+      alert("Ошибка регистрации");
     }
   };
 
@@ -31,8 +30,8 @@ export default function RegisterPage() {
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          type="email"
+          placeholder="Логин"       // ← улучшили текст
+          type="text"               // ✅ Заменено: email → text
           required
         />
         <input
@@ -44,7 +43,6 @@ export default function RegisterPage() {
         />
         <button type="submit">Зарегистрироваться</button>
 
-        {/* Ссылка на вход */}
         <p style={{ marginTop: "15px" }}>
           Есть аккаунт? <Link to="/login">Войти</Link>
         </p>

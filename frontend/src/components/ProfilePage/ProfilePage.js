@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const [login, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function ProfilePage() {
       return;
     }
 
-    // Декодируем токен, чтобы получить login (sub)
+    // Декодируем токен, чтобы получить email (sub)
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       setEmail(payload.sub || "Неизвестный пользователь");
@@ -34,7 +34,7 @@ export default function ProfilePage() {
     <div className="profile-page">
       <h2>Профиль пользователя</h2>
       <div className="profile-info">
-        <p><strong>Логин (login):</strong> {login}</p>
+        <p><strong>Логин (email):</strong> {email}</p>
       </div>
       <button onClick={handleLogout} className="logout-button">
         Выйти

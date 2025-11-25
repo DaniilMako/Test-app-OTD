@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, Body
 
 from database import get_async_session
-from models.models import pages, kpi, users, roles
-from schemas.schemas import Page, RoleUpdate
+from models.models import pages, kpi
+from schemas.schemas import Page
 from dependencies import admin_only
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -37,7 +37,7 @@ async def create_page(page: Page, session: AsyncSession = Depends(get_async_sess
 @router.get("/kpis", dependencies=[Depends(admin_only)])
 async def get_kpis(session: AsyncSession = Depends(get_async_session)):
     result = await session.execute(
-        select(kpi.c.page_id, kpi.c.counter, kpi.c.time_spent, pages.c.title)
+        select(kpi.c.page_id, kpi.c.counter, kpi.c.time_spent, pages.c.title, pages.c.path)
         .join(pages, kpi.c.page_id == pages.c.id)
     )
     rows = result.all()
@@ -48,10 +48,12 @@ async def get_kpis(session: AsyncSession = Depends(get_async_session)):
             "title": row.title,
             "visits": row.counter,
             "time_spent_sec": row.time_spent,
-            "time_spent": f"{row.time_spent // 60} мин {row.time_spent % 60} сек"
+            "time_spent": f"{row.time_spent // 60} мин {row.time_spent % 60} сек",
+            "path": row.path
         }
         for row in rows
     ]
+
 
 
 @router.post("/kpi/{page_id}/time")
@@ -104,7 +106,9 @@ async def delete_page_by_path(
     path: str,
     session: AsyncSession = Depends(get_async_session)
 ):
-    full_path = f"{path}"
+    # Всегда добавляем начальный слеш
+    full_path = f"/{path.lstrip('/')}"  # Убираем лишние слеши и добавляем один
+    print(f"Trying to delete page with path: '{full_path}'")
 
     result = await session.execute(
         select(pages.c.id).where(pages.c.path == full_path)
@@ -127,34 +131,3 @@ async def delete_page_by_path(
     await session.commit()
 
     return {"status": "deleted", "path": full_path}
-
-
-@router.post("/users/role", dependencies=[Depends(admin_only)])
-async def update_user_role(
-    payload: RoleUpdate,
-    session: AsyncSession = Depends(get_async_session)
-):
-    user_result = await session.execute(
-        select(users.c.id, users.c.login).where(users.c.login == payload.login)
-    )
-    user = user_result.first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    role_result = await session.execute(
-        select(roles.c.id, roles.c.name).where(roles.c.name == payload.role_name)
-    )
-    role = role_result.first()
-    if not role:
-        raise HTTPException(status_code=404, detail="Role not found")
-
-    await session.execute(
-        update(users).where(users.c.id == user.id).values(role_id=role.id)
-    )
-    await session.commit()
-
-    return {
-        "status": "role_updated",
-        "login": user.login,
-        "role": role.name,
-    }
