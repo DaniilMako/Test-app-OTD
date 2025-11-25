@@ -249,3 +249,20 @@ task6/
 ## 📄 Лицензия
 
 Проект распространяется под лицензией MIT. Подробности в файле `LICENSE`.
+
+---
+
+ssh -i ~/.ssh/id_rsa_vm_weven user1@213.171.27.204
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker user1
+
+sudo apt install -y git
+git clone https://github.com/ваш-репозиторий/task6.git
+cd task6
+
+docker compose up -d --build
+
+docker compose ps
+docker compose logs backend

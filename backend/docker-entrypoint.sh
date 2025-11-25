@@ -9,9 +9,14 @@ until nc -z "${DB_HOST}" "${DB_PORT}"; do
   sleep 1
 done
 
+echo "Applying database migrations..."
 alembic upgrade head
-python init_roles.py || true
-python init_admin.py || true
 
-exec uvicorn main:app --host 0.0.0.0 --port 8000
- 
+echo "Initializing roles..."
+python init_roles.py
+
+echo "Initializing admin..."
+python init_admin.py
+
+exec uvicorn main:app --reload
+# exec uvicorn main:app --host 0.0.0.0 --port 8000
