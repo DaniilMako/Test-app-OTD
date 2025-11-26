@@ -33,8 +33,8 @@ export default function LoginPage() {
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Логин"       // ← изменили с "Email"
-          type="text"               // ✅ явно указали
+          placeholder="Логин"
+          type="text"
           required
         />
         <input
