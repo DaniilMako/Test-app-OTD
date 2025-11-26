@@ -29,11 +29,12 @@ allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,  # Список разрешённых доменов
+    allow_origins=["http://213.171.27.204:3000", "http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],                       # Разрешаем все методы: GET, POST и т.д.
-    allow_headers=["*"],                       # Разрешаем все заголовки
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 """
 # Промежуточное ПО (middleware) для разрешения отображения в iframe
 # Нужно, чтобы ReDoc и Swagger UI можно было встроить во вкладку в React
