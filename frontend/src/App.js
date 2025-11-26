@@ -55,7 +55,7 @@ function AppContent() {
     if (!isAuthenticated) return;
 
     const token = localStorage.getItem("token");
-    fetch("http://localhost:8000/admin/pages/paths", {
+    fetch("/api/admin/pages/paths", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -81,7 +81,7 @@ function AppContent() {
     let start = performance.now();
     let pageId = null;
 
-    fetch(`http://localhost:8000/admin/page/by-path${path}`, {
+    fetch(`/api/admin/page/by-path${path}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -95,9 +95,9 @@ function AppContent() {
       if (window.navigator.sendBeacon) {
         const body = JSON.stringify({ seconds });
         const blob = new Blob([body], { type: "application/json" });
-        navigator.sendBeacon(`http://localhost:8000/admin/kpi/${pageId}/time`, blob);
+        navigator.sendBeacon(`/api/admin/kpi/${pageId}/time`, blob);
       } else {
-        fetch(`http://localhost:8000/admin/kpi/${pageId}/time`, {
+        fetch(`/api/admin/kpi/${pageId}/time`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
