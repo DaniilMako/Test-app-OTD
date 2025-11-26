@@ -55,7 +55,7 @@ function AppContent() {
     if (!isAuthenticated) return;
 
     const token = localStorage.getItem("token");
-    fetch("/api/admin/pages/paths", {
+    fetch(`${process.env.REACT_APP_API_URL}/api/admin/pages/paths`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -69,19 +69,18 @@ function AppContent() {
       });
   }, [isAuthenticated]);
 
-
   // KPI
   useEffect(() => {
     if (!isAuthenticated || !Array.isArray(trackedPaths) || trackedPaths.length === 0) return;
 
     const path = location.pathname;
-    if (!trackedPaths.includes(path)) return; // ← проверяем динамически
+    if (!trackedPaths.includes(path)) return;
 
     const token = localStorage.getItem("token");
     let start = performance.now();
     let pageId = null;
 
-    fetch(`/api/admin/page/by-path${path}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/admin/page/by-path${path}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -92,12 +91,13 @@ function AppContent() {
 
     const sendTime = (seconds) => {
       if (!pageId || seconds <= 0) return;
+
       if (window.navigator.sendBeacon) {
         const body = JSON.stringify({ seconds });
         const blob = new Blob([body], { type: "application/json" });
-        navigator.sendBeacon(`/api/admin/kpi/${pageId}/time`, blob);
+        navigator.sendBeacon(`${process.env.REACT_APP_API_URL}/api/admin/kpi/${pageId}/time`, blob);
       } else {
-        fetch(`/api/admin/kpi/${pageId}/time`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/admin/kpi/${pageId}/time`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -123,6 +123,7 @@ function AppContent() {
       sendTime(seconds);
     };
   }, [location.pathname, isAuthenticated, trackedPaths]);
+
 
   // Редирект на /login, если неавторизован
   if (!isAuthenticated && !["/login", "/register"].includes(location.pathname)) {
