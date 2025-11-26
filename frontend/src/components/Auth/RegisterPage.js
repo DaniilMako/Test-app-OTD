@@ -10,11 +10,14 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/auth/register", {
+    const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+
+    const res = await fetch(`${API_URL}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (res.ok) {
       alert("Регистрация успешна");
       navigate("/login");
