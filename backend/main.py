@@ -15,12 +15,16 @@ load_dotenv()
 # Создаём экземпляр приложения FastAPI
 app = FastAPI()
 
-app.include_router(admin_router)
-app.include_router(auth_router)
+# app.include_router(admin_router)
+# app.include_router(auth_router)
+
+app.include_router(admin_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
+
 
 # Настраиваем CORS (Cross-Origin Resource Sharing)
 # Поддерживает локальную разработку и внешние домены через переменную окружения
-allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000", "http://213.171.27.204:3000")
 allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
 
 app.add_middleware(
