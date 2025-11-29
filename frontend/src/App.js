@@ -31,19 +31,37 @@ function AppContent() {
     setIsAuthenticated(!!token);
 
     if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1])); // Декод JWT
-        setRole(payload.role);
-      } catch (e) {
-        console.error("Invalid token", e);
-        localStorage.removeItem("token");
-        setIsAuthenticated(false);
-        setRole(null);
-      }
+      fetch("http://localhost:8000/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            // Токен невалиден
+            localStorage.removeItem("token");
+            setIsAuthenticated(false);
+            setRole(null);
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data) {
+            setRole(data.role); // роль из БД
+          } else {
+            setRole(null);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user profile:", err);
+          setRole(null);
+        });
     } else {
       setRole(null);
     }
   }, [location]);
+
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -55,7 +73,7 @@ function AppContent() {
     if (!isAuthenticated) return;
 
     const token = localStorage.getItem("token");
-    fetch(`${process.env.REACT_APP_API_URL}/api/admin/pages/paths`, {
+    fetch("http://localhost:8000/admin/pages/paths", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -69,18 +87,19 @@ function AppContent() {
       });
   }, [isAuthenticated]);
 
+
   // KPI
   useEffect(() => {
     if (!isAuthenticated || !Array.isArray(trackedPaths) || trackedPaths.length === 0) return;
 
     const path = location.pathname;
-    if (!trackedPaths.includes(path)) return;
+    if (!trackedPaths.includes(path)) return; // проверяем динамически
 
     const token = localStorage.getItem("token");
     let start = performance.now();
     let pageId = null;
 
-    fetch(`${process.env.REACT_APP_API_URL}/api/admin/page/by-path${path}`, {
+    fetch(`http://localhost:8000/admin/page/by-path${path}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -91,13 +110,12 @@ function AppContent() {
 
     const sendTime = (seconds) => {
       if (!pageId || seconds <= 0) return;
-
       if (window.navigator.sendBeacon) {
         const body = JSON.stringify({ seconds });
         const blob = new Blob([body], { type: "application/json" });
-        navigator.sendBeacon(`${process.env.REACT_APP_API_URL}/api/admin/kpi/${pageId}/time`, blob);
+        navigator.sendBeacon(`http://localhost:8000/admin/kpi/${pageId}/time`, blob);
       } else {
-        fetch(`${process.env.REACT_APP_API_URL}/api/admin/kpi/${pageId}/time`, {
+        fetch(`http://localhost:8000/admin/kpi/${pageId}/time`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -124,7 +142,6 @@ function AppContent() {
     };
   }, [location.pathname, isAuthenticated, trackedPaths]);
 
-
   // Редирект на /login, если неавторизован
   if (!isAuthenticated && !["/login", "/register"].includes(location.pathname)) {
     return <Navigate to="/login" replace />;
@@ -134,11 +151,13 @@ function AppContent() {
   const noSidebar = ["/login", "/register"].includes(location.pathname);
 
   return (
-    // ✅ Единый flex-контейнер
     <div className="app-container">
       {/* Сайдбар — только если нужен */}
       {!noSidebar && isAuthenticated && (
-        <Sidebar isAuthenticated={isAuthenticated} role={role} onLogout={handleLogout} />
+        <Sidebar 
+        isAuthenticated={isAuthenticated} 
+        role={role} 
+        onLogout={handleLogout} />
       )}
 
       {/* Основной контент — всегда */}

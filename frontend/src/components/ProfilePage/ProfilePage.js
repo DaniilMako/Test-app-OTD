@@ -34,7 +34,7 @@ export default function ProfilePage() {
     <div className="profile-page">
       <h2>Профиль пользователя</h2>
       <div className="profile-info">
-        <p><strong>Логин (email):</strong> {email}</p>
+        <p><strong>Логин:</strong> {email}</p>
       </div>
       <button onClick={handleLogout} className="logout-button">
         Выйти

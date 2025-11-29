@@ -59,7 +59,7 @@ async def get_kpis(session: AsyncSession = Depends(get_async_session)):
 @router.post("/kpi/{page_id}/time")
 async def add_time(
     page_id: int,
-    seconds: int = Body(..., embed=True),  # ← FastAPI поймёт: ожидается JSON: {"seconds": 123}
+    seconds: int = Body(..., embed=True),  # FastAPI поймёт: ожидается JSON: {"seconds": 123}
     session: AsyncSession = Depends(get_async_session)
 ):
     stmt = update(kpi).where(kpi.c.page_id == page_id).values(

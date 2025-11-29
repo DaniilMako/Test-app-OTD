@@ -4,37 +4,26 @@ from PIL import Image, ImageOps  # для работы с изображения
 import io  # Для работы с байтовыми потоками (буферами)
 import requests  # Для HTTP-запросов к внешним API
 from fastapi.middleware.cors import CORSMiddleware  # Для разрешения запросов с React
-import os
-from dotenv import load_dotenv
 
 from routers.admin_router import router as admin_router
 from routers.auth_router import router as auth_router
-
-load_dotenv()
-
 # Создаём экземпляр приложения FastAPI
 app = FastAPI()
 
-# app.include_router(admin_router)
-# app.include_router(auth_router)
+app.include_router(admin_router)
+app.include_router(auth_router)
 
-app.include_router(admin_router, prefix="/api")
-app.include_router(auth_router, prefix="/api")
-
-
+"""
 # Настраиваем CORS (Cross-Origin Resource Sharing)
-# Поддерживает локальную разработку и внешние домены через переменную окружения
-allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
-allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
-
+# Позволяет React (на http://localhost:3000) делать запросы к этому серверу
+"""
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://213.171.27.204:3000", "http://localhost:3000"],
+    allow_origins=["http://localhost:3000"],  # Только с этого адреса можно обращаться
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],                       # Разрешаем все методы: GET, POST и т.д.
+    allow_headers=["*"],                       # Разрешаем все заголовки
 )
-
 """
 # Промежуточное ПО (middleware) для разрешения отображения в iframe
 # Нужно, чтобы ReDoc и Swagger UI можно было встроить во вкладку в React
