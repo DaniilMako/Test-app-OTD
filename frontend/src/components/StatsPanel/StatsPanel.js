@@ -1,5 +1,7 @@
 // src/components/StatsPanel/StatsPanel.js
 import { useState, useEffect } from "react";
+import { API_URL } from "../../config";
+
 
 export default function StatsPage() {
   const [stats, setStats] = useState([]);
@@ -11,7 +13,7 @@ export default function StatsPage() {
       return;
     }
 
-    fetch("http://localhost:8000/admin/kpis", {
+    fetch(`${API_URL}/admin/kpis`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

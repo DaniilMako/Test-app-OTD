@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 // import '../App.css';
 import './APIDocumentation.css';
+import { API_URL } from '../../config';
+
 
 const APIDocumentation = () => {
   // Восстанавливаем последнюю вкладку из localStorage
@@ -39,7 +41,7 @@ const APIDocumentation = () => {
       <div className="api-content">
         {activeTab === 'redoc' && (
           <iframe
-            src="http://localhost:8000/redoc"
+            src={`${API_URL}/redoc`}
             title="ReDoc"
             className="api-frame"
             frameBorder="0"
@@ -47,7 +49,7 @@ const APIDocumentation = () => {
         )}
         {activeTab === 'swagger' && (
           <iframe
-            src="http://localhost:8000/docs"
+            src={`${API_URL}/docs`}
             title="Swagger UI"
             className="api-frame"
             frameBorder="0"

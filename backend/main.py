@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Для разрешени�
 
 from routers.admin_router import router as admin_router
 from routers.auth_router import router as auth_router
+from config import CORS_ORIGINS
 # Создаём экземпляр приложения FastAPI
 app = FastAPI()
 
@@ -15,11 +16,12 @@ app.include_router(auth_router)
 
 """
 # Настраиваем CORS (Cross-Origin Resource Sharing)
-# Позволяет React (на http://localhost:3000) делать запросы к этому серверу
+# Позволяет React делать запросы к этому серверу
+# Настройки берутся из переменной окружения CORS_ORIGINS
 """
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Только с этого адреса можно обращаться
+    allow_origins=CORS_ORIGINS,  # Список разрешенных источников из переменной окружения
     allow_credentials=True,
     allow_methods=["*"],                       # Разрешаем все методы: GET, POST и т.д.
     allow_headers=["*"],                       # Разрешаем все заголовки
@@ -35,8 +37,9 @@ async def add_csp_header(request, call_next):
     # Разрешаем показывать страницу во frame/iframe (даже с другого домена)
     response.headers["X-Frame-Options"] = "ALLOWALL"
     
-    # Более современный способ: разрешаем встраивание с localhost:3000
-    response.headers["Content-Security-Policy"] = "frame-ancestors 'self' http://localhost:3000;"
+    # Более современный способ: разрешаем встраивание из разрешенных источников
+    allowed_origins = ",".join(CORS_ORIGINS)
+    response.headers["Content-Security-Policy"] = f"frame-ancestors 'self' {allowed_origins};"
     
     return response
 """

@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Auth.css";
+import { API_URL } from "../../config";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

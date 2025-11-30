@@ -1,6 +1,8 @@
 // src/components/ImageUpload.js
 import React, { useState } from 'react';
 import './ImageUpload.css';
+import { API_URL } from '../../config';
+
 
 const ImageUpload = () => {
   const [file, setFile] = useState(null);
@@ -25,7 +27,7 @@ const ImageUpload = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/invert-image', {
+      const response = await fetch(`${API_URL}/invert-image`, {
         method: 'POST',
         body: formData,
       });

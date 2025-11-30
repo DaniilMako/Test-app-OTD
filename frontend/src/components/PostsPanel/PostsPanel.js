@@ -2,6 +2,8 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import "./PostsPanel.css";
+import { API_URL } from "../../config";
+
 
 const PostsPanel = () => {
   const [posts, setPosts] = useState([]);
@@ -25,7 +27,7 @@ const PostsPanel = () => {
     try {
       setPosts([]);
       setIsLoading(true);
-      const response = await axios.get("http://localhost:8000/posts");
+      const response = await axios.get(`${API_URL}/posts`);
       // const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
       setPosts(response.data);
       setIsError(false);
@@ -42,7 +44,7 @@ const PostsPanel = () => {
     try {
       setPosts([]);
       setIsLoading(true);
-      const response = await fetch("http://localhost:8000/posts");
+      const response = await fetch(`${API_URL}/posts`);
       // const response = await fetch("https://jsonplaceholder.typicode.com/posts");
       if (!response.ok) throw new Error("Ошибка сети");
       const data = await response.json();
