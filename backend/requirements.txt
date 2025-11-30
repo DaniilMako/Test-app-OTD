@@ -2,8 +2,7 @@ fastapi
 sqlalchemy
 alembic
 asyncpg
-psycopg2
-# psycopg2-binary  # лучше, чем psycopg2, для установки
+psycopg2-binary  # лучше, чем psycopg2, для установки
 python-dotenv
 python-multipart
 python-jose[cryptography]
