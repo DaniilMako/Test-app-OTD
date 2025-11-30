@@ -78,8 +78,8 @@ sudo -u postgres psql
 
 # В консоли PostgreSQL выполните:
 CREATE DATABASE otd;
-CREATE USER your_db_user WITH PASSWORD 'your_secure_password';
-GRANT ALL PRIVILEGES ON DATABASE otd TO your_db_user;
+CREATE USER admin WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE otd TO admin;
 \q
 ```
 
@@ -97,8 +97,8 @@ nano .env
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=otd
-DB_USER=your_db_user
-DB_PASS=your_secure_password
+DB_USER=admin
+DB_PASS=password
 
 # ⚠️ ВАЖНО: Укажите публичный IP или домен вашего сервера
 # Замените YOUR_PUBLIC_IP на реальный IP вашей VM
